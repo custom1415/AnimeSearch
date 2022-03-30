@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar/Navbar.component";
 import CardList from "./components/CardList/CardList.component";
 import { Query } from "./redux/Search/Search.selector";
 function App({ Anime, Loading, LoadingState, SearchQuery }) {
+  
   const [Load, setLoad] = useState(true);
   window.addEventListener("load", () => setLoad(false));
   console.log(SearchQuery);
