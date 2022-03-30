@@ -1,0 +1,4 @@
+export const ANIME_ACTION_TYPES = {
+  ADD_ANIME: "ADD_ANIME",
+  LOADING: "LOADING",
+};

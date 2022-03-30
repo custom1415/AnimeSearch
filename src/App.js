@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { useCallback, useEffect } from "react";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import "./App.css";
+import { fetchAnime, IsLoading } from "./redux/Anime/Anime.actions";
+import { AnimeList, GET_LOADING_STATE } from "./redux/Anime/Anime.selectors";
+import { withLoader } from "./withLoader";
+import Navbar from "./components/Navbar/Navbar.component";
+import CardList from "./components/CardList/CardList.component";
+import { Query } from "./redux/Search/Search.selector";
+function App({ Anime, Loading, LoadingState, SearchQuery }) {
+  console.log(SearchQuery);
+  const DisplayWithLoader = withLoader(CardList);
+  const GetAnime = useCallback(async () => {
+    Loading(true);
+    console.log(SearchQuery);
+    try {
+      const url = `https://api.jikan.moe/v3/search/anime?q=${
+        SearchQuery ? SearchQuery : "One piece"
+      }`;
+      console.log(url);
+      const response = await fetch(url);
+      const data = await response.json();
+      const { results } = data;
+      console.log(results);
+      if (results) {
+        Loading(false);
+        Anime(results);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [SearchQuery]);
+  useEffect(() => {
+    GetAnime();
+  }, [GetAnime, SearchQuery]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <DisplayWithLoader IsLoading={LoadingState} />
     </div>
   );
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => ({
+  Anime: (animes) => dispatch(fetchAnime(animes)),
+  Loading: (bool) => dispatch(IsLoading(bool)),
+});
+const mapStateToProps = createStructuredSelector({
+  LoadingState: GET_LOADING_STATE,
+  AniList: AnimeList,
+  SearchQuery: Query,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,0 +1,29 @@
+.Loading {
+    width: 100vw;
+    height: 40vh;
+    display: grid;
+    place-items: center;
+  }
+  .Star {
+    width: 80px;
+    height: 80px;
+    animation-name: Spin;
+    animation-fill-mode: forwards;
+    animation-duration: 1.4s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+    filter: invert();
+  }
+  @keyframes Spin {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    50% {
+      transform: rotate(180deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
