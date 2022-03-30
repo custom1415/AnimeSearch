@@ -8,7 +8,7 @@ import { CardListContainer } from "./CardList.styles";
 const CardList = ({ Anime }) => {
   return (
     <CardListContainer>
-      {Anime.slice(0, 9).map((anime) => (
+      {Anime.map((anime) => (
         <Card key={anime.mal_id} {...anime}>{anime.title}</Card>
       ))}
     </CardListContainer>
